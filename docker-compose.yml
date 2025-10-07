@@ -4,8 +4,8 @@ services:
     container_name: subs-mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 789365
-      MYSQL_DATABASE: subsdb
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DB}
 
     ports:
       - "3307:3306"
@@ -18,10 +18,18 @@ services:
     restart: always
     environment:
       PMA_HOST: mysql
-      PMA_USER: root
-      PMA_PASSWORD: R00t!Subs@2025
+      PMA_USER: ${PMA_USER}
+      PMA_PASSWORD: ${PMA_PASSWORD}
     ports:
       - "8081:80"
+
+  redis:
+      image: redis:latest
+      container_name: subs-redis
+      restart: always
+      ports:
+        - "6379:6379"
+      command: [ "redis-server", "--save", "", "--appendonly", "no" ]
 
 volumes:
   mysql_data:
