@@ -40,5 +40,12 @@ public class UserService {
         }
         return jwtTokenProvider.generateToken(email);
     }
+    public User findByEmail(String email) {
+        return repo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+
+
 
 }

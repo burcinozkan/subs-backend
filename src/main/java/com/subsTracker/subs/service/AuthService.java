@@ -14,13 +14,14 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
-    public String register(String email, String password) {
+    public String register(String email, String password, String  fullName) {
         if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already registered");
         }
         User user = User.builder()
                 .email(email)
                 .password(passwordEncoder.encode(password))
+                .fullName(fullName)
                 .build();
         userRepository.save(user);
         return "User registered successfully!";
@@ -36,5 +37,14 @@ public class AuthService {
 
         return jwtTokenProvider.generateToken(email);
     }
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
+
 
 }
